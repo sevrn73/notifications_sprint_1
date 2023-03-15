@@ -1,0 +1,43 @@
+@startuml
+!theme cerulean
+title "Архитектура (To Be)"
+
+actor Администратор as Admin
+actor Пользователь as Client
+
+package Notifications {
+ component notifications_api
+ component rabbit_consumer
+ component rabbit_publisher
+ component sender
+ component render
+}
+notifications_api --> rabbit_consumer: "Запись сформированой задачи"
+rabbit_consumer --> render: "Получение задачи на рендер"
+render --> rabbit_publisher: "Рендер задачи"
+rabbit_publisher --> sender: "Получение отрендеренной задачи и отправка пользователям"
+
+database notifications_db
+
+Admin --> AdminNotificationsPanel: "Администрирование\n уведомлений"
+package AdminNotificationsPanel {
+ component DjangoApp
+}
+AdminNotificationsPanel --> notifications_api: "Отправка мгновенных уведомлений"
+AdminNotificationsPanel -up-> notifications_db: "CRUD операции\n с запланированными уведомлениями"
+
+Client --> AuthService: "Регистрация пользователя"
+package AuthService {
+}
+AuthService --> notifications_api: "Формирование запроса на отправку письма о регистрации"
+
+
+package MoviesService {
+ database MoviesElastic
+}
+
+component scheduler
+scheduler <-> notifications_db: "Проверка наличия запланированных уведомлений"
+scheduler <-up-> MoviesElastic: "Проверка наличия новых данных для рассылки"
+scheduler --> notifications_api: "Формирование запроса на рассылку уведомлений/писем"
+@enduml
