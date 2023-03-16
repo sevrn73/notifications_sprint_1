@@ -6,7 +6,6 @@ import pika
 
 logger = logging.getLogger(__name__)
 
-
 class Rabbit(ABC):
     def __init__(self, host, user, password, rabbit_settings) -> None:
         super().__init__()

@@ -1,3 +1,4 @@
+import functools
 import json
 import logging
 from functools import partial
@@ -38,7 +39,7 @@ class Render:
         offset = 0
         while True:
             result = self.db.get_users_from_group(group_id, settings.chunk_size, offset)
-            list_user = [user.user_id for user in result]
+            list_user = [user.user for user in result]
             yield list_user
             if len(result) < settings.chunk_size:
                 break
@@ -70,5 +71,5 @@ class Render:
             rabbit_message.context.payload,
             message_base,
         ):
-            logger.info(new_message)
-            self.rabbit_publisher.publish(json.dumps(new_message.dict()))
+            cb = functools.partial(self.rabbit_publisher.publish, json.dumps(new_message.dict()))
+            self.rabbit_publisher.connection.add_callback_threadsafe(cb)

@@ -4,9 +4,8 @@ from typing import List
 
 import backoff
 import psycopg2
+from config import BACKOFF_CONFIG, Settings
 from psycopg2.extras import RealDictCursor, RealDictRow
-
-from config import Settings, BACKOFF_CONFIG
 from utils.models import NotificationStatus
 
 db_logger = logging.getLogger(__name__)
@@ -100,7 +99,7 @@ class PGNotification(PGConnectorBase):
         sql_tmp = (
             "select notification.id, context.template_id as template_id, context.params, type.title "
             "from notification_notification notification "
-            "left join notification_notificationcontext context on context.id = notification.context_id "
+            "left join notification_context context on context.id = notification.context_id "
             "left join notification_template template on context.template_id = template.id "
             "left join notification_notificationtype type on type.id = template.notification_type_id "
             "WHERE notification.send_date <= %(timestamp)s and send_status = %(notification_status)s"

@@ -1,5 +1,4 @@
 version: "3.7"
-
 services:
   service:
     container_name: notification_api
@@ -12,13 +11,14 @@ services:
       - .env
     depends_on:
       - db
+      
   db:
     container_name: notification_db
     image: postgres:12.0-alpine
     ports:
       - 5432:5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
 
@@ -30,8 +30,8 @@ services:
     env_file:
       - .env
     volumes:
-      - static_volume:/usr/src/static/
-      - media_volume:/usr/src/media/
+      - static_volume:/usr/src/static
+      - media_volume:/usr/src/media
     ports:
       - 8000:8000
     depends_on:
@@ -44,7 +44,7 @@ services:
       - 5672:5672
       - 15672:15672
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_data:/var/lib/rabbitmq
     env_file:
       - .env
 

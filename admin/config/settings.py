@@ -14,7 +14,7 @@ ENV_PREFIX = "BACKEND_"
 
 with env.prefixed(ENV_PREFIX):
     SECRET_KEY = env.str("SECRET_KEY")
-    DEBUG = env.bool("DEBUG", False)
+    DEBUG = env.bool("BACKEND_DEBUG", True)
     DB_NAME = env.str("DB_NAME")
     DB_USER = env.str("DB_USER")
     DB_PASSWORD = env.str("DB_PASSWORD")

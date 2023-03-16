@@ -15,7 +15,7 @@ class MessageTag(Base):
 
 
 class NotificationType(Base):
-    __tablename__ = "notification_type"
+    __tablename__ = "notification_notificationtype"
 
     id = Column(Text, primary_key=True, index=True)
     created_at = Column(DateTime(True))
@@ -24,14 +24,14 @@ class NotificationType(Base):
 
 
 class NotificationGroup(Base):
-    __tablename__ = "notification_group"
+    __tablename__ = "notification_notificationgroup"
 
     id = Column(Text, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     title = Column(String(255), nullable=False)
     notification_type_id = Column(
-        ForeignKey("notification_type.id", deferrable=True, initially="DEFERRED"),
+        ForeignKey("notification_notificationtype.id", deferrable=True, initially="DEFERRED"),
         nullable=False,
         index=True,
     )
@@ -40,13 +40,13 @@ class NotificationGroup(Base):
 
 
 class NotificationTypeTag(Base):
-    __tablename__ = "notification_typetag"
+    __tablename__ = "notification_notificationtypetag"
 
     id = Column(Text, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     notification_type_id = Column(
-        ForeignKey("notification_type.id", deferrable=True, initially="DEFERRED"),
+        ForeignKey("notification_notificationtype.id", deferrable=True, initially="DEFERRED"),
         nullable=False,
         index=True,
     )
@@ -59,17 +59,17 @@ class NotificationTypeTag(Base):
 
 
 class NotificationUnsubscribeUser(Base):
-    __tablename__ = "notification_unsubscribe_user"
+    __tablename__ = "notification_notificationunsubscribeuser"
     __table_args__ = {"extend_existing": True}
 
     id = Column(
         BigInteger,
         primary_key=True,
-        server_default=text("nextval('notification_unsubscribe_user_id_seq'::regclass)"),
+        server_default=text("nextval('notification_notificationunsubscribeuser_seq'::regclass)"),
     )
-    user_id = Column(UUID, nullable=False)
+    user = Column(UUID, nullable=False)
     notification_type_id = Column(
-        ForeignKey("notification_type.id", deferrable=True, initially="DEFERRED"),
+        ForeignKey("notification_notificationtype.id", deferrable=True, initially="DEFERRED"),
         nullable=False,
         index=True,
     )
@@ -88,7 +88,7 @@ class Template(Base):
     subject = Column(String(255), nullable=False)
     code = Column(Text, nullable=False)
     notification_type_id = Column(
-        ForeignKey("notification_type.id", deferrable=True, initially="DEFERRED"),
+        ForeignKey("notification_notificationtype.id", deferrable=True, initially="DEFERRED"),
         nullable=False,
         index=True,
     )
@@ -109,16 +109,16 @@ class Context(Base):
 
 
 class NotificationGroupUser(Base):
-    __tablename__ = "notification_groupuser"
+    __tablename__ = "notification_notificationgroupuser"
 
     id = Column(
         BigInteger,
         primary_key=True,
-        server_default=text("nextval('notification_groupuser_id_seq'::regclass)"),
+        server_default=text("nextval('notification_notificationgroupuser_seq'::regclass)"),
     )
-    user_id = Column(UUID, nullable=False)
+    user = Column(UUID, nullable=False)
     notification_group_id = Column(
-        ForeignKey("notification_group.id", deferrable=True, initially="DEFERRED"),
+        ForeignKey("notification_notificationgroup.id", deferrable=True, initially="DEFERRED"),
         nullable=False,
         index=True,
     )

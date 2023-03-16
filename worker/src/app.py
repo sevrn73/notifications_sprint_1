@@ -1,4 +1,5 @@
 import logging
+import threading
 
 from core.config import settings
 from services.db import NotificationsDb
@@ -8,6 +9,24 @@ from services.render import Render
 from services.sender import Sender
 
 logger = logging.getLogger(__name__)
+
+
+class ConsumerThread(threading.Thread):
+    def __init__(self, host, rabbit_thread, callback_func, *args, **kwargs):
+        super(ConsumerThread, self).__init__(*args, **kwargs)
+
+        self._host = host
+        self.rabbit_thread = rabbit_thread
+        self.callback_func = callback_func
+
+    def run(self):
+        self.rabbit_thread.connect()
+        # while True:
+        try:
+            self.rabbit_thread.listen_channel(self.callback_func, auto_ack=False)
+        except Exception as e:
+            logger.error(e)
+
 
 if __name__ == "__main__":
     db = NotificationsDb(
@@ -46,13 +65,11 @@ if __name__ == "__main__":
     w_sender = Sender(db, rabbit_publisher, email)
 
     logger.info("run worker")
-    while True:
-        db.connect()
-        rabbit_consumer.connect()
-        rabbit_publisher.connect()
-        email.connect()
-        try:
-            rabbit_consumer.listen_channel(w_render.callback, auto_ack=False)
-            rabbit_publisher.listen_channel(w_sender.callback, auto_ack=False)
-        except Exception as e:
-            logger.error(e)
+    db.connect()
+    # email.connect()
+    threads = [
+        ConsumerThread("host1", rabbit_consumer, w_render.callback),
+        ConsumerThread("host2", rabbit_publisher, w_sender.callback),
+    ]
+    for thread in threads:
+        thread.start()

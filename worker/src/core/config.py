@@ -1,6 +1,31 @@
+import logging.config
 from enum import Enum
 
 from pydantic import BaseSettings, Field
+
+LOGGING_CONFIG = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default_formatter": {
+            "format": "%(asctime)s - [%(levelname)s] -  %(name)s - (%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
+        },
+    },
+    "handlers": {
+        "stream_handler": {
+            "class": "logging.StreamHandler",
+            "formatter": "default_formatter",
+        },
+    },
+    "loggers": {
+        "__main__": {"handlers": ["stream_handler"], "level": "INFO", "propagate": True},
+        "services.db": {"handlers": ["stream_handler"], "level": "INFO", "propagate": True},
+        "services.rabbit": {"handlers": ["stream_handler"], "level": "INFO", "propagate": True},
+        "services.render": {"handlers": ["stream_handler"], "level": "INFO", "propagate": True},
+        "services.sender": {"handlers": ["stream_handler"], "level": "INFO", "propagate": True},
+    },
+}
+logging.config.dictConfig(LOGGING_CONFIG)
 
 
 class RabbitPublisher(BaseSettings):

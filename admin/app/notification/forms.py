@@ -65,6 +65,7 @@ class NotificationForm(forms.ModelForm):
         notification_group = self.cleaned_data.get("notification_group")
         template = self.cleaned_data.get("template")
         send_date = " ".join(ast.literal_eval(self.cleaned_data.get("send_date")))
+        
         context = Context(
             params={"group_id": notification_group.id},
             template=template,

@@ -1,13 +1,11 @@
 import logging
 from http import HTTPStatus
-
 from time import sleep
 
 from config import settings
-from utils.postgres_helper import PGNotification, db_logger
 from utils.models import Context, Message
-from utils.rabbitmq_helper import send_message_to_api, rabbit_logger
-
+from utils.postgres_helper import PGNotification, db_logger
+from utils.rabbitmq_helper import rabbit_logger, send_message_to_api
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +19,6 @@ def main(db: PGNotification) -> None:
     :param db: интерфейс базы данных
     """
     try:
-        print("ин трай")
         result = db.get_notification()
         data = [{key: value for key, value in item.items()} for item in result]
 
@@ -66,6 +63,5 @@ if __name__ == "__main__":
     pg = PGNotification(settings)
 
     while True:
-        print("ин вайл")
         main(pg)
         sleep(settings.RESTART_TIME)

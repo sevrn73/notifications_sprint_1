@@ -47,15 +47,15 @@ class Sender:
         template = template_raw.Template
 
         unsubscribe_user = [
-            item.user_id
+            item.user
             for item in self.db.get_unsubscribe(type_notification.title, users_id=message_rabbit.context.users_id)
         ]
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
-        for user_id in message_rabbit.context.users_id:
-            if user_id in unsubscribe_user:
+        for user in message_rabbit.context.users_id:
+            if user in unsubscribe_user:
                 continue
-            user_info = self.api_user.get_user(user_id)
+            user_info = self.api_user.get_user(user)
             context_user = {**message_rabbit.context.payload.dict(), "username": user_info.user_name}
             message = self.__template_render(template.code, context_user)
             try:

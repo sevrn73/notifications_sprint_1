@@ -50,7 +50,7 @@ class NotificationsDb:
     def get_unsubscribe(self, type_notification, users_id):
         return (
             self.session.query(NotificationUnsubscribeUser)
-            .where(NotificationUnsubscribeUser.user_id.in_(users_id))
+            .where(NotificationUnsubscribeUser.user.in_(users_id))
             .join(NotificationType, NotificationUnsubscribeUser.notification_type_id == NotificationType.id)
             .filter(NotificationType.title == type_notification)
             .all()

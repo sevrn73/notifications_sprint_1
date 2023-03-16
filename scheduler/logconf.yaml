@@ -11,11 +11,11 @@ handlers:
     formatter: console_custom
     stream: ext://sys.stdout
 loggers:
-  utils.api_rabbit:
+  utils.rabbitmq_helper:
     level: INFO
     handlers: [ console ]
     propagate: no
-  utils.posgres_db:
+  utils.posgres_helper:
     level: INFO
     handlers: [ console ]
     propagate: no
@@ -23,6 +23,3 @@ loggers:
     level: INFO
     handlers: [ console ]
     propagate: no
-# root:
-#   level: DEBUG
-#   handlers: [console]

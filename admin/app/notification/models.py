@@ -73,7 +73,7 @@ class Notification(BaseTimeModel):
         choices=NotificationStatus.choices,
         default=NotificationStatus.WAITING,
     )
-    send_date = models.DateTimeField(editable=True, auto_now=True)
+    send_date = models.DateTimeField(editable=True, blank=True, null=True)
 
 
 class NotificationGroup(BaseTimeModel):

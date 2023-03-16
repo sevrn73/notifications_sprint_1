@@ -1,13 +1,15 @@
+from enum import Enum
 from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 
-class NotificationType:
+class NotificationType(Enum):
     NEW_SERIES = "new_series"
     EMAIL = "email_confirmation"
     RECOMMENDATIONS = "recommendations"
+
 
 class FilmsData(BaseModel):
     film_id: UUID
@@ -26,7 +28,7 @@ class Context(BaseModel):
 
 
 class NotificationsExt(BaseModel):
-    type_send: NotificationType = Field(NotificationType.NEW_SERIES)
+    type_send: str = Field(NotificationType.NEW_SERIES)
     template_id: UUID
     notification_id: Optional[UUID]
     last_chunk: bool = False

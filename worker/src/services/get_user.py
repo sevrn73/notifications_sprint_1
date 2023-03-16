@@ -7,7 +7,7 @@ from requests import Session
 
 
 class User(BaseModel):
-    user_id: str
+    user: str
     user_name: str
     user_email: str
 
@@ -23,7 +23,7 @@ class ApiUserInfo:
 
     def get_user(self, uuid):
         url = f"{self.base_url}/user"
-        data = {"user_id": uuid}
+        data = {"user": uuid}
         result = self.session.post(url, data=data)
         if result.status_code != http.HTTPStatus.OK:
             raise ValueError(result)
@@ -35,4 +35,4 @@ fake = Faker()
 
 class ApiUserInfoFake(ApiUserInfo):
     def get_user(self, uuid):
-        return User(**{"user_id": uuid, "user_name": fake.name(), "user_email": fake.email()})
+        return User(**{"user": uuid, "user_name": fake.name(), "user_email": "sevrn@inbox.ru"})
