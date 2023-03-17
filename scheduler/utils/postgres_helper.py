@@ -30,7 +30,7 @@ class PGConnectorBase:
         self.cursor = None
         self.connect()
 
-    # @backoff.on_exception(**BACKOFF_CONFIG)
+    @backoff.on_exception(**BACKOFF_CONFIG)
     def connect(self) -> None:
         """
         Установка соединения с postgress
@@ -46,7 +46,7 @@ class PGConnectorBase:
         self.cursor = self.db.cursor()
         db_logger.info("connect db")
 
-    # @backoff.on_exception(**BACKOFF_CONFIG)
+    @backoff.on_exception(**BACKOFF_CONFIG)
     def get_query(self, sql: str) -> List[RealDictRow]:
         """
         Получение данных из postgress
@@ -59,13 +59,13 @@ class PGConnectorBase:
         try:
             self.cursor.execute(sql)
         except psycopg2.OperationalError:
-            db_logger.info("Ошибка подключения к базе postgres")
+            db_logger.info("Postgres connection error")
             self.connect()
             self.cursor.execute(sql)
         result = self.cursor.fetchall()
         return result
 
-    # @backoff.on_exception(**BACKOFF_CONFIG)
+    @backoff.on_exception(**BACKOFF_CONFIG)
     def set_query(self, sql: str):
         """
         Отправка данных в postgress
@@ -78,7 +78,7 @@ class PGConnectorBase:
         try:
             self.cursor.execute(sql)
         except psycopg2.OperationalError:
-            db_logger.info("Ошибка подключения к базе postgres")
+            db_logger.info("Postgres connection error")
             self.connect()
             self.cursor.execute(sql)
         self.db.commit()

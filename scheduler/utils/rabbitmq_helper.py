@@ -22,6 +22,6 @@ def send_message_to_api(message: dict):
     :param message: сообщение
     -------
     """
-    rabbit_logger.info(f"Отправляем запрос на API по нотификации")
+    rabbit_logger.info(f"Send message to notification API")
     resp = requests.post(settings.API_URL, data=json.dumps(message))
     return resp

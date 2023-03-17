@@ -32,4 +32,4 @@ async def rabbit_connection(settings: Settings) -> None:
 if __name__ == "__main__":
     settings = get_settings()
     asyncio.run(rabbit_connection(settings))
-    logger.info(f"Установлено соединение с RabbitMQ")
+    logger.info(f"Connected to RabbitMQ")
