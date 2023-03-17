@@ -8,7 +8,7 @@ Base = declarative_base()
 class MessageTag(Base):
     __tablename__ = "notification_messagetag"
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     tag = Column(String(255), nullable=False)
@@ -17,7 +17,7 @@ class MessageTag(Base):
 class NotificationType(Base):
     __tablename__ = "notification_notificationtype"
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     title = Column(String(255), nullable=False)
@@ -26,7 +26,7 @@ class NotificationType(Base):
 class NotificationGroup(Base):
     __tablename__ = "notification_notificationgroup"
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     title = Column(String(255), nullable=False)
@@ -42,7 +42,7 @@ class NotificationGroup(Base):
 class NotificationTypeTag(Base):
     __tablename__ = "notification_notificationtypetag"
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     notification_type_id = Column(
@@ -81,7 +81,7 @@ class Template(Base):
     __tablename__ = "notification_template"
     __table_args__ = {"extend_existing": True}
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     title = Column(String(255), nullable=False)
@@ -99,7 +99,7 @@ class Template(Base):
 class Context(Base):
     __tablename__ = "notification_context"
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     params = Column(JSONB(astext_type=Text()), nullable=False)
     template_id = Column(
         ForeignKey("notification_template.id", deferrable=True, initially="DEFERRED"), nullable=False, index=True
@@ -129,7 +129,7 @@ class NotificationGroupUser(Base):
 class Notification(Base):
     __tablename__ = "notification_notification"
 
-    id = Column(Text, primary_key=True, index=True)
+    id = Column(UUID, primary_key=True, index=True)
     created_at = Column(DateTime(True))
     updated_at = Column(DateTime(True))
     send_status = Column(String(50), nullable=False)

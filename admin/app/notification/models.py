@@ -12,7 +12,7 @@ class NotificationStatus(models.TextChoices):
 
 class BaseTimeModel(models.Model):
 
-    id = models.TextField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -56,7 +56,7 @@ class Template(BaseTimeModel):
 
 class Context(models.Model):
 
-    id = models.TextField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     params = models.JSONField(blank=False, null=False, default=dict)
     template = models.ForeignKey(Template, on_delete=models.CASCADE)
 

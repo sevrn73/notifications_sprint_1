@@ -2,14 +2,13 @@ import ast
 
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-
-from notification.forms import NotificationGroupForm, NotificationForm
+from notification.forms import NotificationForm, NotificationGroupForm
 from notification.models import (
+    MessageTag,
     Notification,
     NotificationGroup,
     NotificationGroupUser,
     NotificationType,
-    MessageTag,
     Template,
 )
 
@@ -71,7 +70,7 @@ class NotificationGroupAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, change, **kwargs)
         return form
 
-    def save_form(self, request, form, change):
+    def save_form(self, request, form: NotificationGroupForm, change: bool):
         group = super(NotificationGroupAdmin, self).save_form(request, form, change)
         users_ids = ast.literal_eval(form.cleaned_data.get('users_ids_to_group'))
         group_users = [
