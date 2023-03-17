@@ -66,7 +66,7 @@ class RabbitMQState(State):
             )
             return _conn
         except (aio_pika.exceptions.AMQPError, ConnectionError):
-            logger.info(f"Потеряна связь с RabbitMQ")
+            logger.info(f"RabbitMQ connection error")
             raise HTTPException(status_code=404, detail="RabbitMQ ConnectionError")
 
     async def _publish_rabbitmq(self, message: dict, queue: str) -> None:
@@ -88,7 +88,8 @@ class RabbitMQState(State):
             await exchange.publish(
                 aio_pika.Message(json.dumps(message).encode("utf-8")), routing_key=queue
             )
-            logger.info(f"Сообщение опубликовано в очередь {queue}")
+
+            logger.info(f"Message send to {queue}")
 
     async def send_rabbitmq(self, message: dict, queue: str) -> None:
         """
@@ -109,7 +110,7 @@ class RabbitMQState(State):
         if self._conn:
             connect_status = await self._conn.is_open
             if connect_status:
-                logging.debug("Соединение с RabbitMQ закрывается")
+                logging.debug("Close RabbitMQ connection")
                 await self._conn.close()
 
 

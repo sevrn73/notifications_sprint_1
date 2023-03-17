@@ -27,10 +27,10 @@ async def send_notification(
     :param settings: настройки проекта
     """
     if notification.type_send == NotificationType.NEW_SERIES or notification.type_send == NotificationType.EMAIL:
-        logger.info(f"Принята нотификация для очереди {settings.email_queue}")
+        logger.info(f"Received message for {settings.email_queue}")
         notification.last_chunk = True
         await rabbitmq_client.send_rabbitmq(notification.dict(), settings.email_queue)
     else:
-        logger.info(f"Принята нотификация для очереди {settings.group_queue}")
+        logger.info(f"Received message for {settings.group_queue}")
         await rabbitmq_client.send_rabbitmq(notification.dict(), settings.group_queue)
     return HTTPStatus.OK
